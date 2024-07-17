@@ -6,6 +6,7 @@ import * as Yup from "yup";
 import PersonalDetails from "./PersonalDetails";
 import Address from "./Address";
 import Feedback from "./Feedback";
+import ThankYou from "./ThankYou";
 
 const steps = [PersonalDetails, Address, Feedback];
 
@@ -33,6 +34,7 @@ interface FormValues {
 
 const MultiStepForm: React.FC = () => {
   const [step, setStep] = useState(0);
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   const handleSubmit = (
     values: FormValues,
@@ -43,11 +45,14 @@ const MultiStepForm: React.FC = () => {
     } else {
       console.log("Form submitted", values);
       // Send the data to an API here
+      setIsSubmitted(true);
     }
     setSubmitting(false);
   };
 
   const CurrentStep = steps[step];
+
+  if (isSubmitted) return <ThankYou />;
 
   return (
     <Formik
@@ -94,7 +99,7 @@ const MultiStepForm: React.FC = () => {
             <div className="flex-1">
               <button
                 type="submit"
-                disabled={isSubmitting }
+                disabled={isSubmitting}
                 className="w-full px-4 py-2 text-sm font-medium text-white bg-indigo-600 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
               >
                 {step === steps.length - 1 ? "Submit" : "Next"}
